@@ -1,0 +1,149 @@
+---
+title: "tidy_quarto_review_Pham"
+format: html
+editor: visual
+---
+
+
+
+
+
+
+
+```{r}
+#install.packages("palmerpenguins")
+#install.packages("patchwork")
+library(tidyverse)
+library(palmerpenguins)
+library(patchwork)
+```
+
+
+
+```{r}
+penguins<- penguins
+glimpse(penguins)
+```
+##Question 1,2
+There are 344 rows and 8 columns so 344x8
+Each row is a different penguin that was recorded
+
+```{r}
+penguins_small<- penguins |> select(species, island, sex, body_mass_g, flipper_length_mm)
+
+penguins_Adelie<- penguins |> filter(species=="Adelie")
+
+penguins_big<- penguins |> filter(body_mass_g>5000)
+
+glimpse(penguins_Adelie)
+
+glimpse(penguins_big)
+
+penguins_kg<- data.frame(body_mass_kg= penguins$body_mass_g/1000)
+```
+
+##Summary 1
+```{r}
+penguins_Gentoo<- penguins |> filter(species== "Gentoo")
+glimpse(penguins_Gentoo)
+mean_body_mass_gentoo<- mean(penguins_Gentoo$body_mass_g, na.rm = TRUE)
+median_body_mass_gentoo<- median(penguins_Gentoo$body_mass_g, na.rm = TRUE)
+mean_flipper_length_gentoo<- mean(penguins_Gentoo$flipper_length_mm, na.rm = TRUE)
+mean_body_mass_gentoo
+median_body_mass_gentoo
+mean_flipper_length_gentoo
+
+
+penguins_Chinstrap<- penguins |>  filter(species== "Chinstrap")
+glimpse(penguins_Chinstrap)
+mean_body_mass_Chinstrap<- mean(penguins_Chinstrap$body_mass_g, na.rm = TRUE)
+median_body_mass_Chinstrap<- median(penguins_Chinstrap$body_mass_g, na.rm = TRUE)
+mean_flipper_length_Chinstrap<- mean(penguins_Chinstrap$flipper_length_mm, na.rm = TRUE)
+mean_body_mass_Chinstrap
+median_body_mass_Chinstrap
+mean_flipper_length_Chinstrap
+
+mean_body_mass_Adelie<- mean(penguins_Adelie$body_mass_g, na.rm = TRUE)
+median_body_mass_Adelie<- median(penguins_Adelie$body_mass_g, na.rm = TRUE)
+mean_flipper_length_Adelie<- mean(penguins_Adelie$flipper_length_mm, na.rm = TRUE)
+mean_body_mass_Adelie
+median_body_mass_Adelie
+mean_flipper_length_Adelie
+```
+The first type of penguin is the Adelie penguin. There are 152 observations of the Adelie penguins. The mean body mass is 3700.66 grams, the median body mass is 3700 grams, and the mean flipper length is 189.95 milimeters.
+
+The second type of penguin is the Gentoo penguin. There were 124 observations of this penguin. The mean body mass is 5076.02 grams, the median body mass was 5000 grams, and the mean flipper length was 217.19 milimeters.
+
+The last species of penguin is the Chinstrap penguin. There are only 68 observations of this species. The mean body mass was 3733.09 grams, the median body mass was 3700 grams, and the mean flipper length was 195.82 milimeters.
+
+##Independant Review A
+```{r}
+female_penguins_Adelie<- penguins_Adelie |> filter(sex== "female")
+mean(female_penguins_Adelie$body_mass_g)
+
+female_penguins_Gentoo<- penguins_Gentoo|> filter(sex== "female")
+mean(female_penguins_Gentoo$body_mass_g)
+
+female_penguins_Chinstrap<- penguins_Chinstrap |> filter(sex== "female")
+mean(female_penguins_Chinstrap$body_mass_g)
+```
+Gentoo penguins have the largest females which makes sense because they also have the largest all around body mass 
+
+
+##Independent Review B
+```{r}
+Adelie_Torgersen<- penguins_Adelie |> filter(island=="Torgersen")
+Adelie_Biscoe<- penguins_Adelie |> filter(island=="Biscoe")
+Adelie_Dream<- penguins_Adelie |> filter(island=="Dream")
+
+##the other species of penguins only live on one island so there is no need to make new variables
+ReviewB<-data.frame(
+  Name= c("Adelie Torgersen", "Adelie Dream", "Adelie Biscoe", "Gentoo Biscoe", "Chinstrap Dream"),
+  Count= c(count(Adelie_Torgersen), count(Adelie_Dream), count(Adelie_Biscoe), count(penguins_Gentoo), count(penguins_Chinstrap)),
+  meanFlipper= c(mean(Adelie_Torgersen$flipper_length_mm, na.rm = TRUE), mean(Adelie_Dream$flipper_length_mm, na.rm = TRUE), mean(Adelie_Biscoe$flipper_length_mm, na.rm = TRUE), mean_flipper_length_gentoo, mean_body_mass_Chinstrap)
+)
+
+```
+I don't know how to order this
+
+##Review C
+I dont know how to order a dataframe but you could use head to find out
+if you look at the data its:
+All 5 are male Gentoos from Biscoe and their bodyweights are 6300, 6050, 6000, 6000, 5950
+
+##Visualizations
+
+```{r}
+ggplot(penguins,aes(x= species, y= body_mass_g))+
+  geom_boxplot()+
+  labs(x= "Penguin Species", y= "Body mass (Grams)", title= "Body mass by Penguin species")
+
+)
+
+ggplot(penguins, aes(x= body_mass_g, y= flipper_length_mm, shape = species))+
+         geom_point()+
+         labs(x= "Body mass (Grams)", y= "Flipper Length (Milimeters)", title= "Body mass and Flipper Length")
+       )
+```
+
+##Put it together
+```{r}
+penguins_male<- penguins |> filter(sex=="male")
+penguins_female<- penguins |> filter(sex=="female")
+
+male_plot<-ggplot(penguins_male, aes(x= species, y= body_mass_g))+
+         geom_boxplot()+
+          labs(x= "Male Penguin Species", y= "Body mass (Grams)", title= "Body mass by Penguin species")+
+  ylim(2000,6500)
+
+female_plot<-ggplot(penguins_female, aes(x= species, y= body_mass_g))+
+         geom_boxplot()+
+          labs(x= "Female Penguin Species", y= "Body mass (Grams)", title= "Body mass by Penguin species")+
+  ylim(2000,6500)
+
+
+total_plot<- male_plot | female_plot
+total_plot
+
+```
+Yes, it seems that female penguins are saller on average than the male penguins of their species, the Gentoo penguins however seem to have the largest gap in between them.
