@@ -146,3 +146,13 @@ total_plot
 ```
 
 Yes, it seems that female penguins are saller on average than the male penguins of their species, the Gentoo penguins however seem to have the largest gap in between them.
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarize(
+    n=n(),
+    mean_mass= mean(body_mass_g, na.rm= TRUE),
+    median_mass= median(body_mass_g, na.rm = TRUE),
+    mean_flipper_length= )
+```
