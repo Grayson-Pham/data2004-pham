@@ -54,8 +54,7 @@ fishing_superior<- read_xlsx("data/raw/commercial.xlsx", sheet = "Superior")
 
 #what is the total catch of the lake
 
-fishing_superior |> 
-  sum(`Grand Total`)
+
 
 fishing_superior_long<- fishing_superior |> 
   pivot_longer(
@@ -64,3 +63,6 @@ fishing_superior_long<- fishing_superior |>
     values_to = "value"
 )
 
+
+fishing_superior_long |> 
+  
